@@ -1,0 +1,68 @@
+const input = "1+2*3";
+
+let oprStack = [];
+let postFixStack = [];
+
+const weight = {
+  "/": 3,
+  "*": 2,
+  "+": 1,
+  "-": 0,
+};
+
+for (let i = 0; i < input.length; i++) {
+  console.log(input[i], !isNaN(input[i]));
+  if (!isNaN(input[i])) {
+    postFixStack.push(input[i]);
+  } else {
+    if (oprStack.length > 0) {
+      if (weight[oprStack[oprStack.length - 1]] > weight[input[i]]) {
+        postFixStack.push(oprStack.pop());
+      }
+    }
+    oprStack.push(input[i]);
+  }
+}
+
+while (oprStack.length !== 0) {
+  postFixStack.push(oprStack.pop());
+}
+
+console.info(postFixStack);
+
+// final calculation
+
+let solStack = [];
+let i = 0;
+while (i <= postFixStack.length - 1) {
+  const current = postFixStack[i];
+
+  if (!isNaN(current)) {
+    solStack.push(current);
+  } else {
+    let b = +solStack.pop();
+    let a = +solStack.pop();
+    let sol = 0;
+
+    console.log(current, a, b);
+
+    switch (current) {
+      case "+":
+        sol = a + b;
+      case "-":
+        sol = a - b;
+      case "*":
+        sol = a * b;
+      case "/":
+        sol = a / b;
+    }
+
+    solStack.push(sol);
+    sol = 0;
+  }
+
+  console.log(solStack);
+  i++;
+}
+
+console.log(solStack);
